@@ -1,0 +1,538 @@
+<div class="card" *ngIf="role == 'ADMIN'" >
+  <p-table
+      #dt1
+     [value]="products"
+      dataKey="id"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+  >
+      <ng-template pTemplate="caption">
+          <div class="flex">
+              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1)"></button>
+
+              <span class="p-input-icon-left ml-auto">
+
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text"
+                   placeholder="Search by name" [(ngModel)]="searchByname" />
+                   <button  pButton pRipple label="Add product"
+                    icon="pi pi-plus" class="p-button-primary ml-2"
+                   (click)="openNew()"></button>
+                   <!-- (input)="dt1.filterGlobal($event.target.value, 'contains')" -->
+              </span>
+
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <!-- <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                      Picture
+                      <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                  </div>
+              </th> -->
+              <th style="min-width:16rem">
+                  <div class="flex align-items-center">
+                    Name
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+               <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                     Price
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+
+              <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                    Quantity
+                      <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                      Weight
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+                  <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                    Guarantee
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+
+
+                <th style="min-width:18rem">
+                  <div class="flex align-items-center">
+                     Action
+                      <p-columnFilter type="numeric" field="balance" display="menu" currency="USD">
+
+                      </p-columnFilter>
+                  </div>
+              </th>
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product >
+          <tr *ngIf="product.nom.toUpperCase().includes(searchByname.toUpperCase())">
+              <!-- <td>
+                  <img [src]="product.photos[0]?.url">
+              </td> -->
+              <td>
+                {{ product.nom }}
+              </td>
+              <td>
+                {{ product.prix }}
+
+              </td>
+              <td>
+                {{ product.quantite}}
+              </td>
+              <td>
+                {{ product.poids }}
+              </td>
+              <td> {{ product.garantit}}</td>
+              <td>
+                <div  style="display: flex">
+                  <!-- <span *ngIf="project.user != null" class="alert alert-success">
+                    Assigned to <strong>{{project.user?.userName}}</strong></span> -->
+
+                  <button  pButton pRipple label="photo"
+                   icon="pi pi-plus" (click)="openDialogPhoto(product.id)"
+                 class="p-button-secondary "></button>
+                 <button  pButton pRipple
+                 icon="pi pi-user-edit" (click)="openEditDialog(product)"
+                 class="p-button-secondary ml-2"></button>
+                  <button  pButton (click)="navigate(product.id)"
+                   pRipple  icon="pi pi-info-circle"
+                 class="p-button-warning ml-2"></button>
+                 <button  pButton pRipple (click)="deleteProduit(product.id)"
+                 icon="pi pi-trash"
+                 class="p-button-danger ml-2"></button>
+                </div>
+              </td>
+
+
+            </tr>
+
+            <!-- <ng-template pTemplate="emptymessage" *ngIf="projects.length == 0 ">
+                <tr>
+                    <td colspan="7">No projects found.</td>
+                </tr>
+            </ng-template> -->
+              <!-- <p-dialog [header]=" 'Assign ' +assignProject.projectName"
+              [(visible)]="assignModalOpened"
+              [style]="{ width: '37vw',height:'17vw' }">
+                <div class="flex py-2 justify-content-center mt-3">
+                  <p-dropdown *ngIf="assignModalOpened"
+                  [(ngModel)]="selectedUser"
+                  [options]="lits_pms"
+                  optionLabel="userFirstName"
+                  placeholder="Select a PM">
+              </p-dropdown>
+              <p-button class="ml-2" *ngIf="assignModalOpened" label="Confirm" (onClick)="assignProjectToUser(selectedUser.userName, project.projectId)" autoFocus></p-button>
+
+
+
+      </div>
+      <div class="row ml-1" style="margin-top: 50px;" *ngIf="projectBeingEdited === project.projectId">
+
+          <form (ngSubmit)="onSubmitStepForm()">
+              <input class="mr-2" pInputText [(ngModel)]="step.name" name="name" placeholder="Step Name"
+              required />
+
+
+              <p-calendar class="mr-2" [(ngModel)]="step.startDate" name="startDate"
+              [showIcon]="true"></p-calendar>
+              <p-calendar class="mr-2" [(ngModel)]="step.endDate"
+               name="endDate" [showIcon]="true">
+              </p-calendar>
+
+              <button class="btn btn-primary mb-1" style="height: 41px; width: 70px;"  type="submit" label="A" >Add
+              </button>
+
+          </form>
+      </div>
+
+            </p-dialog> -->
+
+      </ng-template>
+
+
+  </p-table>
+  </div>
+  <form #productForm="ngForm" *ngIf="role == 'ADMIN'">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}"
+    header="Add product"
+     [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Name :</label>
+                <input type="text" pInputText id="name"
+                required [(ngModel)]="product.nom" name="nom"
+                     />
+                <small *ngIf="productForm.submitted && !product.nom"
+                class="ng-dirty ng-invalid text-danger font-medium">Name is required.</small>
+            </div>
+            <div class="field">
+                <label for="description">Price :</label>
+                <input id="description" pInputText required rows="3" cols="20"
+                    [(ngModel)]="product.prix" name="prix"
+                    name="prix">
+                    <small *ngIf="productForm.submitted && !product.nom"
+                    class="ng-dirty ng-invalid text-danger font-medium">
+                    Price is required.</small>
+            </div>
+            <div class="field">
+                <label for="name">Quantity :</label>
+                <input type="text" pInputText id="sponsor" required
+                 [(ngModel)]="product.quantite" name="quantite" />
+                 <small *ngIf="productForm.submitted && !product.quantite"
+                 class="ng-dirty ng-invalid text-danger font-medium">
+                 Quantity is required.</small>
+
+            </div>
+            <div class="field">
+                <label for="name">Weight :</label>
+                <input type="text" pInputText id="domain" required
+                 [(ngModel)]="product.poids" name="poids" />
+                <small *ngIf="productForm.submitted && !product.poids"
+                class="ng-dirty ng-invalid text-danger font-medium">
+                Weight iés required.</small>
+            </div>
+               <div class="field">
+                <label for="name">Guarantee :</label>
+                <input type="text" pInputText id="domain" required
+                 [(ngModel)]="product.garantit" name="garantit" />
+                <small *ngIf="productForm.submitted && !product.garantit"
+                class="ng-dirty ng-invalid text-danger font-medium">
+                Weight is required.</small>
+            </div>
+            <div class="field">
+                <label for="name">Category :</label>
+                <p-dropdown [options]="categories"
+                [(ngModel)]="selectedCategory" name="categorie" optionLabel="nom"></p-dropdown>
+
+                <small *ngIf="productForm.submitted && !product.categorie"
+                class="ng-dirty ng-invalid text-danger font-medium">
+                Category is required.</small>
+            </div>
+
+
+
+
+
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="addProduct(productForm)" (click)="showSuccessViaMessages()"></button>
+        </ng-template>
+        <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div>
+    </p-dialog>
+    </form>
+
+    <p-dialog [(visible)]="EditproductDialog" [style]="{width: '450px'}"
+    header="Edit product"
+     [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Name :</label>
+                <input type="text" pInputText id="name"
+                required [(ngModel)]="productEdit.nom" name="nom"
+                     />
+            </div>
+            <div class="field">
+                <label for="description">Price :</label>
+                <input id="description" pInputText required rows="3" cols="20"
+                    [(ngModel)]="productEdit.prix" name="prix"
+                    name="prix">
+
+            </div>
+            <div class="field">
+                <label for="name">Quantity :</label>
+                <input type="text" pInputText id="sponsor" required
+                 [(ngModel)]="productEdit.quantite" name="quantite" />
+
+
+            </div>
+            <div class="field">
+                <label for="name">Weight :</label>
+                <input type="text" pInputText id="domain" required
+                 [(ngModel)]="productEdit.poids" name="poids" />
+
+            </div>
+               <div class="field">
+                <label for="name">Guarantee :</label>
+                <input type="text" pInputText id="domain" required
+                 [(ngModel)]="productEdit.garantit" name="garantit" />
+
+            </div>
+            <div class="field">
+                <label for="name">Category :</label>
+                <p-dropdown [options]="categories"
+                [(ngModel)]="productEdit.categorie" name="categorie"
+                optionLabel="nom"></p-dropdown>
+
+            </div>
+
+
+
+
+
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="editProduct()"
+                (click)="showSuccessViaMessages()"></button>
+        </ng-template>
+        <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div>
+    </p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+<form #photoForm="ngForm" *ngIf="role == 'ADMIN'">
+    <p-dialog [(visible)]="DialogPhoto" [style]="{width: '450px'}"
+    header="Add photo"
+     [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="title">Title :</label>
+                <input type="text" pInputText id="title"
+                required [(ngModel)]="photo.title" name="title"
+                     />
+                <small *ngIf="photoForm.submitted && !photo.title"
+                class="ng-dirty ng-invalid text-danger font-medium">Title is required.</small>
+            </div>
+            <div class="field">
+                <label for="description">Description :</label>
+                <input id="description" pInputText required rows="3" cols="20"
+                    [(ngModel)]="photo.description" name="description"
+                    name="prix">
+                    <small *ngIf="photoForm.submitted && !photo.description"
+                    class="ng-dirty ng-invalid text-danger font-medium">
+                    Description is required.</small>
+            </div>
+
+            <div class="field">
+                <label for="name">Photo :</label>
+                <div class="custom-file">
+                  <input [(ngModel)]="photo.url" name="url" type="file"
+                  class="custom-file-input" id="customFile"
+                   (change)="selectFile($event)">
+                  <small *ngIf="photoForm.submitted && photo.url =='' "
+                  class="ng-dirty ng-invalid text-danger font-medium">
+                  Photos is required.</small>
+                  <label class="custom-file-label" for="customFile">Choose files</label>
+                </div>
+
+             </div>
+
+
+
+
+
+
+
+
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="addPhoto(photoForm)" (click)="showSuccessViaMessages()"></button>
+        </ng-template>
+        <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div>
+    </p-dialog>
+
+
+  </form>
+
+
+
+ <div class="card"  *ngIf="role == 'CLIENT' ">
+  <p-dataView #dv [value]="products">
+    <ng-template let-product pTemplate="listItem">
+        <div class="col-12">
+            <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                [src]="product.photos[0].url" [alt]="product.name" />
+                <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                    <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                        <div class="text-2xl font-bold text-900">{{ product.nom }}</div>
+                        <p-rating [(ngModel)]="product.rating"
+                         [readonly]="true" [cancel]="false"></p-rating>
+                        <div class="flex align-items-center gap-3">
+                            <span class="flex align-items-center gap-2">
+                                <i class="pi pi-tag"></i>
+                                <span class="font-semibold">{{ product.categorie.nom }}</span>
+                            </span>
+                            <!-- <p-tag [value]="product.inventoryStatus"
+                            [severity]="getSeverity(product)"></p-tag> -->
+                        </div>
+                    </div>
+                    <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-2xl font-semibold">{{ product.prix }} TND</span>
+                        <div class="flex">
+                          <button pButton icon="pi pi-info-circle" (click)="navigate(product.id)"
+                          class="md:align-self-end mb-2 p-button-rounded"
+                          [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></button>
+                          <button pButton icon="pi pi-shopping-cart"
+                           (click)="AddToPanier(product)"
+                         class="md:align-self-end mb-2 p-button-rounded ml-1"
+                          [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dataView>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <div class="my-2">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"></button>
+        </div>
+    </ng-template>
+
+</p-toolbar>
+
+<form #projectForm="ngForm">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Project details" [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Project name :</label>
+                <input type="text" pInputText id="name" [(ngModel)]="project.projectName" name="projectName"
+                    name="projectName" />
+                <small class="ng-dirty ng-invalid">Name is required.</small>
+            </div>
+            <div class="field">
+                <label for="description">Project description :</label>
+                <textarea id="description" pInputTextarea required rows="3" cols="20"
+                    [(ngModel)]="project.projectDescription" name="projectDescription"
+                    name="projectDescription"></textarea>
+            </div>
+            <div class="field">
+                <label for="name">Sponsor :</label>
+                <input type="text" pInputText id="sponsor" [(ngModel)]="project.sponsor" name="sponsor" />
+                <small class="ng-dirty ng-invalid">Sponsor is required.</small>
+            </div>
+            <div class="field">
+                <label for="name">Domain :</label>
+                <input type="text" pInputText id="domain" [(ngModel)]="project.domain" name="domain" />
+                <small class="ng-dirty ng-invalid">Domain is required.</small>
+            </div>
+            <div class="field">
+                <label for="name">Nature :</label>
+                <input type="text" pInputText id="nature" [(ngModel)]="project.nature" name="nature" />
+                <small class="ng-dirty ng-invalid">Nature is required.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-calendar inputId="dated" [(ngModel)]="project.startDate" name="startDate"></p-calendar>
+                    <label for="calendar">Date debut:</label>
+                </span>
+            </div>
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-calendar inputId="datef" [(ngModel)]="project.endDate" name="endDate"></p-calendar>
+                    <label for="calendar">Date fin:</label>
+                </span>
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="addProject(projectForm)" (click)="showSuccessViaMessages()"></button>
+        </ng-template>
+        <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div>
+    </p-dialog>
+
+
+
+
+
+
+
+</form> -->

@@ -1,0 +1,179 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/ecommerce.png" alt="logo">
+        <span>Ecommerce</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button"
+     (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+
+
+    <button #topbarmenubutton
+    class="p-link layout-topbar-menu-button layout-topbar-button"
+    (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu"
+     [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button *ngIf="role == 'CLIENT' " class="p-link layout-topbar-button"
+        (click)="open.toggle($event)">
+            <i class="pi pi-shopping-cart"></i>
+            <span>Cart</span>
+        </button>
+        <button class="p-link layout-topbar-button mr-2" (click)="op.toggle($event)">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+
+
+
+        <div class="flex flex-wrap gap-2">
+
+            <button pButton pRipple type="button" *ngIf="isLoggedIn()"
+             (click)="logout()" label="Sign out" class="p-button-outlined p-button-secondary"></button>
+        </div>
+    </div>
+</div>
+
+<p-overlayPanel #op [style]="{'width': '450px'}" [showCloseIcon]="true">
+  <ng-template pTemplate="content">
+     <div class="card">
+      <div class ="card-header font-medium text-primary" >
+        User Profile
+      </div>
+      <div class="card-body">
+      <p-avatar [label]="user.username.substr(0,1).toUpperCase()"
+      styleClass="mr-2" size="large"
+      [style]="{ 'background-color': '#2196F3', color: '#ffffff','margin-left':'280px' }"
+       shape="circle"></p-avatar>
+     <div class="font-medium no-underline text-muted"><strong>Firstname :</strong>
+       {{user.prenom}} </div>
+     <br>
+     <div class="font-medium no-underline text-muted"><strong>Lastname :</strong>
+      {{user.nom}} </div>
+     <br>
+     <div class="font-medium no-underline text-muted"><strong>Username :</strong> {{user.username}} </div>
+     <br>
+     <div class="font-medium no-underline text-muted"><strong>UserEmail :</strong> {{user.email}} </div>
+     <br>
+     <div class="font-medium no-underline text-muted"><strong>UserRole :</strong> {{user.roles[0].role}} </div>
+     </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+
+<p-overlayPanel #open  [style]="{'width': '1000px'}" [showCloseIcon]="true">
+  <ng-template pTemplate="content" >
+
+    <h6 *ngIf="lignepaniers.length == 0"> your card is empty</h6>
+
+        <p-orderList [value]="lignepaniers" *ngIf="lignepaniers.length != 0"
+        [listStyle]="{ 'max-height': '30rem','max-width' :'120rem' }"
+         [header]="'Total Card :'+'  '+paniers[0].total+' TND'">
+          <ng-template let-lignePanier pTemplate="item">
+              <div class="flex align-items-center p-2 w-full flex-wrap">
+                  <div class="w-full text-center lg:w-auto lg:text-left">
+                      <img [src]="lignePanier.produit.photos[0].url"
+                      [alt]="lignePanier.produit.nom" class="mr-3 shadow-3 w-7rem mb-3 lg:w-5rem lg:mb-auto" />
+                  </div>
+                  <div class="flex-1">
+                      <h5 class="mb-2">{{ lignePanier.produit.nom }}</h5>
+                      <i class="pi pi-tag vertical-align-middle mr-2"></i>
+                      <span class="vertical-align-middle line-height-1">{{ lignePanier.produit.categorie.nom }}</span>
+
+                    </div>
+                    <div>
+                      <div style="margin-right: 250px;">
+                        <h6 class="mb-2">{{ lignePanier.produit.prix }} TND</h6>
+                    </div>
+                    </div>
+
+                  <div  style="margin-right: 74px;">
+                    <div class="quantity-input flex">
+                      <button class="btn btn-success" (click)="decrementerQuantite(lignePanier)" >-</button>
+                      <input style="width: 40px;" [(ngModel)]="lignePanier.quantite"  class="form-control"  type="text"  min="1">
+                      <button class="btn btn-success" (click)="incrementerQuantite(lignePanier)" >+</button>
+                    </div>
+                  </div>
+
+
+                  <div class="flex flex-column align-items-end">
+                      <h6 class="mb-2">{{ lignePanier.total }} TND</h6>
+                  </div>
+                   <div class="flex flex-column align-items-end ml-4">
+                    <p-button icon="pi pi-times" (click)="delete(lignePanier.id)"
+                    styleClass="p-button-rounded p-button-danger p-button-outlined"></p-button>
+                  </div>
+              </div>
+          </ng-template>
+
+      </p-orderList>
+
+      <button *ngIf="lignepaniers.length != 0"  style="margin-left: 780px;"
+       pButton pRipple label="checkout"
+      icon="pi pi-shopping-bag" class="p-button-primary mt-2"
+      (click)="openCheckoutModal()"
+     ></button>
+  </ng-template>
+
+</p-overlayPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+<form #f="ngForm">
+<p-dialog [(visible)]="checkoutModal" [style]="{width: '450px'}"
+header="Checkout"
+ [modal]="true"
+    class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Adresse de livraison :</label>
+            <input type="text" pInputText id=""
+            required [(ngModel)]="commande.adresse_livraison" name="adresse_livraison"
+                 />
+            <small *ngIf="f.submitted && commande.adresse_livraison == ''"
+            class="ng-dirty ng-invalid text-danger font-medium">Adresse is required.</small>
+        </div>
+         <div class="field">
+            <label for="name">Code postal :</label>
+            <input type="text" pInputText id=""
+            required [(ngModel)]="commande.code" name="code"
+                 />
+            <small *ngIf="f.submitted && commande.code == ''"
+            class="ng-dirty ng-invalid text-danger font-medium">Code is required.</small>
+        </div>
+
+
+
+
+
+
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+         (click)="save()"     (click)="showSuccessViaMessages()"></button>
+    </ng-template>
+    <div class="flex flex-wrap gap-2">
+        <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+    </div>
+</p-dialog>
+</form>

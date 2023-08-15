@@ -1,0 +1,217 @@
+<div class="card" >
+  <p-table *ngIf="user.roles[0].role == 'CLIENT'"
+      #dt1
+     [value]="Orders_client"
+      dataKey="id"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+  >
+      <ng-template pTemplate="caption">
+          <div class="flex">
+              <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1)"></button> -->
+
+              <span class="p-input-icon-left ml-auto">
+
+
+              </span>
+
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+
+              <th style="min-width:16rem">
+                  <div class="flex align-items-center">
+                    Username
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+               <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                     Address
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+
+              <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                    Code
+                      <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                     Total
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+                  <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                   Products
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+
+
+
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-commande >
+          <tr >
+            <!-- *ngIf="product.nom.toUpperCase().includes(searchByname.toUpperCase())" -->
+
+              <td>
+                {{ commande.panier.user.username }}
+              </td>
+              <td>
+                {{ commande.adresse_livraison }}
+
+              </td>
+              <td>
+                {{ commande.code}}
+              </td>
+              <td>
+                {{ commande.panier.total }} TND
+              </td>
+              <td>
+                <div *ngFor="let ligne of commande.panier.lignepaniers ">
+                 {{ligne.quantite}}&nbsp;{{ ligne.produit.nom}}&nbsp;
+                </div>
+              </td>
+              <!-- <td>
+                <div  style="display: flex">
+
+
+                </div>
+              </td> -->
+
+
+            </tr>
+
+
+
+      </ng-template>
+
+
+  </p-table>
+  <p-table *ngIf="user.roles[0].role == 'ADMIN' "
+      #dt1
+     [value]="allOrders"
+      dataKey="id"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+  >
+      <ng-template pTemplate="caption">
+          <div class="flex">
+              <button pButton label="Clear" class="p-button-outlined"
+               icon="pi pi-filter-slash"
+              ></button>
+   <!-- (click)="clear(dt1)" -->
+              <span class="p-input-icon-left ml-auto">
+
+
+              </span>
+
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+
+              <th style="min-width:16rem">
+                  <div class="flex align-items-center">
+                    Username
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+               <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                     Address
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+
+              <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                    Code
+                      <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                     Total
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+                  <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                   Products
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+                <th style="min-width:11rem" *ngIf="role == 'ADMIN' ">
+                  <div class="flex align-items-center">
+                  Action
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+
+
+
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-commande >
+          <tr >
+            <!-- *ngIf="product.nom.toUpperCase().includes(searchByname.toUpperCase())" -->
+
+              <td>
+                {{ commande.panier.user.username }}
+              </td>
+              <td>
+                {{ commande.adresse_livraison }}
+
+              </td>
+              <td>
+                {{ commande.code}}
+              </td>
+              <td>
+                {{ commande.panier.total }} TND
+              </td>
+              <td>
+                <div *ngFor="let ligne of commande.panier.lignepaniers ">
+                 {{ligne.quantite}}&nbsp;{{ ligne.produit.nom}}&nbsp;
+                </div>
+              </td>
+              <td *ngIf="role == 'ADMIN' ">
+                <button  pButton pRipple label="Delete" (click)="delete(commande.id)"
+                 icon="pi pi-trash"
+                 class="p-button-danger ml-2"></button>
+              </td>
+
+
+            </tr>
+
+
+
+      </ng-template>
+
+
+  </p-table>
+  </div>

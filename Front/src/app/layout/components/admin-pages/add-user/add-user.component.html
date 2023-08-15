@@ -1,0 +1,559 @@
+<div class="card" >
+  <p-table
+      #dt1
+      [value]="users"
+      dataKey="id"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+  >
+      <ng-template pTemplate="caption">
+          <div class="flex">
+              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1)"></button>
+
+              <span class="p-input-icon-left ml-auto">
+
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text"
+                   placeholder="Search by username" [(ngModel)]="searchByname" />
+                   <button  pButton pRipple label="Add User"
+                    icon="pi pi-plus" class="p-button-primary ml-2"
+                   (click)="openNew()"></button>
+                   <!-- (input)="dt1.filterGlobal($event.target.value, 'contains')" -->
+              </span>
+
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                      Firstname
+                      <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th style="min-width:16rem">
+                  <div class="flex align-items-center">
+                    Lastname
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+               <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                     Username
+                      <p-columnFilter type="text" field="country.name" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+
+              <th style="min-width:12rem">
+                  <div class="flex align-items-center">
+                    Email
+                      <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                      Address
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+
+              <th style="min-width:11rem">
+                <div class="flex align-items-center">
+                    Country
+                    <p-columnFilter type="numeric" field="balance"
+                    display="menu" currency="USD"></p-columnFilter>
+                </div>
+            </th>
+            <th style="min-width:11rem">
+              <div class="flex align-items-center">
+                  Phone
+                  <p-columnFilter type="numeric" field="balance"
+                  display="menu" currency="USD"></p-columnFilter>
+              </div>
+          </th>
+
+
+                <th style="min-width:18rem">
+                  <div class="flex align-items-center">
+                     Action
+                      <p-columnFilter type="numeric" field="balance" display="menu" currency="USD">
+
+                      </p-columnFilter>
+                  </div>
+              </th>
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+          <tr *ngIf="user.username.toUpperCase().includes(searchByname.toUpperCase())">
+              <td>
+                  {{ user.prenom }}
+              </td>
+              <td>
+                {{ user.nom }}
+              </td>
+              <td>
+                {{ user.username }}
+
+              </td>
+              <td>
+                {{  user.email }}
+              </td>
+              <td>
+                {{  user.adresse }}
+              </td>
+              <td> {{ user.ville }}</td>
+              <td> {{ user.numero  }}</td>
+              <td>
+                <div  style="display: flex">
+
+
+                  <button  pButton pRipple label="Edit"
+                 icon="pi pi-user-edit" (click)="openEditDialog(user)"
+                 class="p-button-secondary ml-2"></button>
+                 <button  pButton pRipple label="Delete" (click)="delete(user.id)"
+                 icon="pi pi-trash"
+                 class="p-button-danger ml-2"></button>
+
+                </div>
+              </td>
+
+
+            </tr>
+
+            <!-- <ng-template pTemplate="emptymessage" *ngIf="projects.length == 0 ">
+                <tr>
+                    <td colspan="7">No projects found.</td>
+                </tr>
+            </ng-template> -->
+              <!-- <p-dialog [header]=" 'Assign ' +assignProject.projectName"
+              [(visible)]="assignModalOpened"
+              [style]="{ width: '37vw',height:'17vw' }">
+                <div class="flex py-2 justify-content-center mt-3">
+                  <p-dropdown *ngIf="assignModalOpened"
+                  [(ngModel)]="selectedUser"
+                  [options]="lits_pms"
+                  optionLabel="userFirstName"
+                  placeholder="Select a PM">
+              </p-dropdown>
+              <p-button class="ml-2" *ngIf="assignModalOpened" label="Confirm" (onClick)="assignProjectToUser(selectedUser.userName, project.projectId)" autoFocus></p-button>
+
+
+
+      </div>
+      <div class="row ml-1" style="margin-top: 50px;" *ngIf="projectBeingEdited === project.projectId">
+
+          <form (ngSubmit)="onSubmitStepForm()">
+              <input class="mr-2" pInputText [(ngModel)]="step.name" name="name" placeholder="Step Name"
+              required />
+
+
+              <p-calendar class="mr-2" [(ngModel)]="step.startDate" name="startDate"
+              [showIcon]="true"></p-calendar>
+              <p-calendar class="mr-2" [(ngModel)]="step.endDate"
+               name="endDate" [showIcon]="true">
+              </p-calendar>
+
+              <button class="btn btn-primary mb-1" style="height: 41px; width: 70px;"  type="submit" label="A" >Add
+              </button>
+
+          </form>
+      </div>
+
+            </p-dialog> -->
+
+      </ng-template>
+
+
+
+
+  </p-table>
+  <form #userForm="ngForm">
+    <p-dialog [(visible)]="editDialog" [style]="{width: '450px'}"
+    header="Edit User"
+     [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Firstanme :</label>
+                <input type="text" pInputText id="name"
+                required [(ngModel)]="userEdit.prenom" name="prenom"
+                     />
+
+            </div>
+            <div class="field">
+              <label for="nom">Lastname :</label>
+              <input type="text" pInputText id="nom"
+              required [(ngModel)]="userEdit.nom" name="nom"
+                   />
+
+          </div>
+          <div class="field">
+              <label for="username">Username :</label>
+              <input type="text" pInputText id="username"
+              required [(ngModel)]="userEdit.username" name="username"
+                   />
+
+          </div>
+          <div class="field">
+              <label for="email">Email :</label>
+              <input type="text" pInputText id="email"
+              required [(ngModel)]="userEdit.email" name="email"
+                   />
+
+          </div>
+           <div class="field">
+              <label for="adresse">Address :</label>
+              <input type="text" pInputText id="adresse"
+              required [(ngModel)]="userEdit.adresse" name="adresse"
+                   />
+
+          </div>
+          <div class="field">
+              <label for="ville">Country :</label>
+              <input type="text" pInputText id="ville"
+              required [(ngModel)]="userEdit.ville" name="ville"
+                   />
+
+          </div>
+           <div class="field">
+              <label for="numero">Phone :</label>
+              <input type="text" pInputText id="numero"
+              required [(ngModel)]="userEdit.numero" name="numero"
+                   />
+
+          </div>
+
+
+
+
+
+
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times"
+             class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button  pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="Edit()"></button>
+
+        </ng-template>
+        <!-- <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div> -->
+    </p-dialog>
+
+
+
+
+
+
+
+  </form>
+
+    <p-dialog [(visible)]="userDialog" [style]="{width: '450px'}"
+    header="Add User"
+     [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Firstanme :</label>
+                <input type="text" pInputText id="name"
+                required [(ngModel)]="user.prenom" name="prenom"
+                     />
+                <small *ngIf="userForm.submitted && !user.prenom"
+                class="ng-dirty ng-invalid text-danger font-medium">
+                Firstanme is required.</small>
+            </div>
+            <div class="field">
+              <label for="nom">Lastname :</label>
+              <input type="text" pInputText id="nom"
+              required [(ngModel)]="user.nom" name="nom"
+                   />
+              <small *ngIf="userForm.submitted && !user.nom"
+              class="ng-dirty ng-invalid text-danger font-medium">Lastname is required.
+            </small>
+          </div>
+          <div class="field">
+              <label for="username">Username :</label>
+              <input type="text" pInputText id="username"
+              required [(ngModel)]="user.username" name="username"
+                   />
+              <small *ngIf="userForm.submitted && !user.username"
+              class="ng-dirty ng-invalid text-danger font-medium">Username is required.
+            </small>
+          </div>
+          <div class="field">
+              <label for="email">Email :</label>
+              <input type="text" pInputText id="email"
+              required [(ngModel)]="user.email" name="email"
+                   />
+              <small *ngIf="userForm.submitted && !user.email"
+              class="ng-dirty ng-invalid text-danger font-medium">Email is required.
+            </small>
+          </div>
+           <div class="field">
+              <label for="adresse">Address :</label>
+              <input type="text" pInputText id="adresse"
+              required [(ngModel)]="user.adresse" name="adresse"
+                   />
+              <small *ngIf="userForm.submitted && !user.adresse"
+              class="ng-dirty ng-invalid text-danger font-medium">Address is required.
+            </small>
+          </div>
+          <div class="field">
+              <label for="ville">Country :</label>
+              <input type="text" pInputText id="ville"
+              required [(ngModel)]="user.ville" name="ville"
+                   />
+              <small *ngIf="userForm.submitted && !user.adresse"
+              class="ng-dirty ng-invalid text-danger font-medium">Country is required.
+            </small>
+          </div>
+           <div class="field">
+              <label for="numero">Phone :</label>
+              <input type="text" pInputText id="numero"
+              required [(ngModel)]="user.numero" name="numero"
+                   />
+              <small *ngIf="userForm.submitted && !user.numero"
+              class="ng-dirty ng-invalid text-danger font-medium">Phone is required.
+            </small>
+          </div>
+           <div class="field" *ngIf="!disabledpassword">
+              <label for="motDePasse">Password :</label>
+              <input type="password" pInputText id="motDePasse"
+              required [(ngModel)]="user.motDePasse" name="motDePasse"
+                   />
+              <small *ngIf="userForm.submitted && !user.motDePasse"
+              class="ng-dirty ng-invalid text-danger font-medium">Password is required.
+            </small>
+          </div>
+
+
+
+
+
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times"
+             class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button *ngIf="!disabledpassword" pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                (click)="onSubmit()"></button>
+                 <button *ngIf="disabledpassword" pButton pRipple label="Edit"
+                 icon="pi pi-check" class="p-button-text"
+                (click)="Edit()"></button>
+        </ng-template>
+        <!-- <div class="flex flex-wrap gap-2">
+            <p-messages [value]="msgs" *ngIf="successMessage"></p-messages>
+        </div> -->
+    </p-dialog>
+
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+
+ <div class="page-content">
+  <div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+  <div class="card">
+    <h4>Add new user</h4>
+    <hr>
+
+ <form [formGroup]="userForm" (ngSubmit)="onSubmit()"  #f ="ngForm">
+  <div class="card-body">
+  <div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+  <div class="custom-mt-form">
+  <div class="form-group">
+    <label for="userFirstName">Firstname</label>
+    <div  >
+      <input type="text" placeholder="Firstname"  style="width: 400px;"
+      pInputText formControlName="userFirstName">
+    </div>
+    <div class="alert alert-danger mt-2" style="width: 400px;" *ngIf=" userForm.get('userFirstName')?.invalid
+     && (userForm.get('userFirstName')?.dirty || userForm.get('userFirstName')?.touched || f.submitted )">
+      <div> Firstname is required</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="userLastName">Lastname</label>
+    <div>
+      <input type="text"  placeholder="Lastname"  style="width: 400px;" id="userLastName"
+      pInputText formControlName="userLastName">
+    </div>
+    <div class="alert alert-danger mt-2"
+    style="width: 400px;" *ngIf=" userForm.get('userLastName')?.invalid
+     && (userForm.get('userLastName')?.dirty || userForm.get('userLastName')?.touched || f.submitted )">
+      <div> Lastname is required</div>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="userName">UserName</label>
+    <div>
+      <input type="text" placeholder="Username" style="width: 400px;" id="userName"
+      pInputText formControlName="userName">
+    </div>
+    <div *ngIf="Exists">
+
+      <span  class="text-danger mt-4">user already taken</span>
+    </div>
+    <div class="alert alert-danger mt-2"
+    style="width: 400px;" *ngIf=" userForm.get('userName')?.invalid
+     && (userForm.get('userName')?.dirty || userForm.get('userName')?.touched
+     || f.submitted )">
+      <div> Username is required</div>
+  </div>
+
+  </div>
+  </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+  <div class="custom-mt-form">
+    <div class="form-group">
+      <label for="userName">UserEmail</label>
+      <div>
+        <input type="text" placeholder="UserEmail"  style="width: 400px;" id="userEmail"
+        pInputText formControlName="userEmail">
+      </div>
+      <div class="alert alert-danger mt-2"
+      style="width: 400px;" *ngIf=" userForm.get('userEmail')?.invalid
+       && (userForm.get('userEmail')?.dirty || userForm.get('userEmail')?.touched
+       || f.submitted )">
+        <div> UserEmail is required</div>
+    </div>
+    </div>
+    <div class="form-group">
+      <label for="userName">UserPassword</label>
+      <div>
+        <input type="password"  placeholder="UserPassword"  style="width: 400px;" id="userPassword"
+        pInputText formControlName="userPassword">
+      </div>
+      <div class="alert alert-danger mt-2"
+      style="width: 400px;" *ngIf=" userForm.get('userPassword')?.invalid
+       && (userForm.get('userPassword')?.dirty || userForm.get('userPassword')?.touched
+       || f.submitted )">
+        <div> Userpassword is required</div>
+    </div>
+    </div>
+  <div class="form-group">
+    <label for="userName">Role</label>
+<div class="input-group form-group" style="width: 400px;">
+  <select id="roleName"  class="custom-select" id="inputGroupSelect02"
+style="height: 43px;"
+ formControlName="roleName">
+  <option *ngFor="let role of roles" [value]="role.roleName">{{ role.roleName }}</option>
+</select>
+<div class="alert alert-danger mt-2"
+style="width: 400px;" *ngIf=" userForm.get('roleName')?.invalid
+ && (userForm.get('roleName')?.dirty || userForm.get('roleName')?.touched
+ || f.submitted )">
+  <div> Rolename is required</div>
+</div>
+</div>
+</div>
+  </div>
+  </div>
+
+  </div>
+  </div>
+  <div class="form-group text-right custom-mt-form-group" >
+    <button class="btn btn-success mr-2" style="margin-top: 20px; margin-left: 20px;"
+      pButton pRipple type="submit"  >
+      <div *ngIf="ActiveSpinner && !Exists" class="spinner-border text-white mr-2" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      Create user</button>
+
+
+    </div>
+</form>
+  </div>
+  </div>
+  </div>
+  </div>
+  <br>
+  <div class="card">
+    <p-table [value]="users" [tableStyle]="{ 'min-width': '52rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Username</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.userName }}</td>
+                <td>{{ user.userFirstName }}</td>
+                <td>{{ user.userLastName }}</td>
+                <td *ngFor="let role of user.role">{{ role.roleName }}</td>
+                <td>
+                  <button pButton pRipple type="button"
+                  (click)="onDelete(user.userName)" label="Delete" class="p-button-outlined p-button-secondary"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+ -->
