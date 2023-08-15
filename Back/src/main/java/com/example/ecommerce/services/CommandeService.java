@@ -18,6 +18,7 @@ public class CommandeService {
     @Autowired
     PanierRepository panierRepository;
     public Commande AddCommande(Commande commande) {
+
         return commandeRepository.save(commande);
     }
     public void deleteCommande(Long id) {

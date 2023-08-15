@@ -66,6 +66,11 @@ export class AppTopBarComponent {
       this.paniers = this.paniers.filter(p => p.user.id == this.id)
       console.log("paniers :", this.paniers)
       this.lignepaniers = this.paniers[0]?.lignepaniers
+      if (this.isValid) {
+        this.lignepaniers = [];
+      } else {
+        this.lignepaniers = this.paniers[0]?.lignepaniers
+      }
       console.log(this.lignepaniers);
     })
   }
@@ -99,8 +104,9 @@ export class AppTopBarComponent {
       console.log(data)
       this.isValid = true;
       this.checkoutModal = false;
+      
     })
-  }
+    }
   }
   getPaniers() {
     this.panierserviceService.getAll().subscribe(res => {
