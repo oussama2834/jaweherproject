@@ -25,10 +25,15 @@
 
                     <label for="userPassword"
                      class="block text-900 font-medium text-xl mb-2 mt-5">Password</label>
-                    <p-password  ngModel name="motDePasse" required
+                    <input  ngModel name="motDePasse" required type="password"
+                    id="userPassword" placeholder="Password"  pInputText
+
+                    class="w-full md:w-30rem " style="padding:1rem">
+
+                  <!-- <p-password  ngModel name="motDePasse" required
                     id="userPassword" placeholder="Password"
-                    [toggleMask]="true"
-                    inputStyleClass="w-full p-3 md:w-30rem"></p-password>
+
+                    inputStyleClass="w-full p-3 md:w-30rem"></p-password> -->
                     <div>
                       <small *ngIf="loginForm.submitted && loginForm.value.userPassword =='' "
                       class="ng-dirty ng-invalid text-danger font-medium">
