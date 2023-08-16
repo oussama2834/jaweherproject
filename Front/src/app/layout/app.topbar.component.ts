@@ -65,11 +65,12 @@ export class AppTopBarComponent {
       this.paniers = res
       this.paniers = this.paniers.filter(p => p.user.id == this.id)
       console.log("paniers :", this.paniers)
-      this.lignepaniers = this.paniers[0]?.lignepaniers
+      this.lignepaniers = this.paniers[0].lignepaniers
+      console.log(this.lignepaniers)
       if (this.isValid) {
         this.lignepaniers = [];
       } else {
-        this.lignepaniers = this.paniers[0]?.lignepaniers
+        this.lignepaniers = this.paniers[0].lignepaniers
       }
       console.log(this.lignepaniers);
     })
@@ -103,8 +104,9 @@ export class AppTopBarComponent {
     this.commandeserviceService.create(this.commande).subscribe(data => {
       console.log(data)
       this.isValid = true;
+
       this.checkoutModal = false;
-      
+
     })
     }
   }
@@ -112,7 +114,7 @@ export class AppTopBarComponent {
     this.panierserviceService.getAll().subscribe(res => {
       this.paniers = res
       this.paniers = this.paniers.filter(p => p.user.id == this.id)
-      console.log("paniers :",this.paniers)
+      console.log("paniers :", this.paniers)
       this.lignepaniers = this.paniers[0]?.lignepaniers
       this.total = this.paniers[0].total;
 

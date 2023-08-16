@@ -23,6 +23,7 @@ export class CommandesComponent {
       this.allOrders = data;
       this.Orders_client = this.allOrders.filter(order =>order.panier.user.id == this.id)
       console.log('commandes',this.allOrders)
+      console.log('commandespourclient',this.Orders_client)
     })
   }
   ngOnInit() {

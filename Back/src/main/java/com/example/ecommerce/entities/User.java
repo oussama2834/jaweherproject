@@ -24,7 +24,11 @@ public class User {
     private String ville;
     private String numero;
     private String motDePasse ;
-    @OneToMany(fetch=FetchType.EAGER)
-    private List<Role> roles;
-
+//    @OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.MERGE)
+//    private List<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+     private List<Role> roles;
 }

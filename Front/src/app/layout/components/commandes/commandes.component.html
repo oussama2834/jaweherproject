@@ -64,8 +64,11 @@
 
 
           </tr>
+          <p class="text-muted mt-4 ml-4" *ngIf="Orders_client.length == 0"> No orders yet .</p>
       </ng-template>
       <ng-template pTemplate="body" let-commande >
+
+
           <tr >
             <!-- *ngIf="product.nom.toUpperCase().includes(searchByname.toUpperCase())" -->
 
@@ -96,7 +99,9 @@
 
 
             </tr>
-
+            <tr>
+              <td *ngIf="Orders_client.length == 0"> No orders yet</td>
+            </tr>
 
 
       </ng-template>
@@ -178,6 +183,7 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-commande >
+
           <tr >
             <!-- *ngIf="product.nom.toUpperCase().includes(searchByname.toUpperCase())" -->
 

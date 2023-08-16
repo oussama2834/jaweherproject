@@ -53,6 +53,14 @@ export class AddUserComponent implements OnInit {
   }
   openNew() {
     this.userDialog = true;
+    this.user.adresse = "";
+    this.user.email = "";
+    this.user.motDePasse = "";
+        this.user.nom = "";
+        this.user.numero = "";
+        this.user.prenom = "";
+        this.user.ville = "";
+        this.user.username = "";
     console.log(this.userDialog)
   }
   clear(x: any) {
@@ -131,6 +139,7 @@ export class AddUserComponent implements OnInit {
               // Handle error
             }
           )
+
 
       // this.showError();
 
