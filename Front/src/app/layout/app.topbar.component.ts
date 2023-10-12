@@ -24,6 +24,8 @@ export class AppTopBarComponent {
   successMessage: string = '';
   user = new UserModel();
   paniers: Panier[] = [];
+  panier: Panier = new Panier();
+  paniersEdited: Panier[] = [];
   lignepaniers: LignePanier[] = [];
   commande = new Commande();
   id !: number;
@@ -64,14 +66,11 @@ export class AppTopBarComponent {
     this.panierServiceService.getAll().subscribe(res => {
       this.paniers = res
       this.paniers = this.paniers.filter(p => p.user.id == this.id)
+      this.paniersEdited = this.paniers;
       console.log("paniers :", this.paniers)
       this.lignepaniers = this.paniers[0].lignepaniers
       console.log(this.lignepaniers)
-      if (this.isValid) {
-        this.lignepaniers = [];
-      } else {
-        this.lignepaniers = this.paniers[0].lignepaniers
-      }
+
       console.log(this.lignepaniers);
     })
   }
@@ -82,10 +81,15 @@ export class AppTopBarComponent {
     ligne.quantite++;
    this.lignepanierserviceService.edit(ligne,this.paniers[0].id).subscribe(data => {
      console.log('panier edited +:',data)
-
+  
    // console.log(ligne)
-      this.getPaniers();
+      this.ngOnInit();
+     this.panier = JSON.parse(localStorage.getItem('panier') || '');
+     this.panier.total = this.paniers[0].total
+        this.panier = this.paniers[0];
+        localStorage.setItem("paniered", JSON.stringify(this.panier));
    })
+
   }
   decrementerQuantite(ligne:LignePanier) {
     if (ligne.quantite > 1) {
@@ -93,6 +97,9 @@ export class AppTopBarComponent {
       this.lignepanierserviceService.edit(ligne,this.paniers[0].id).subscribe(data => {
         console.log('panier edited -:', data)
         this.getPaniers();
+         this.panier = JSON.parse(localStorage.getItem('panier')|| '' );
+        this.panier = this.paniers[0];
+        localStorage.setItem("panier", JSON.stringify(this.panier));
       })
     }
 
@@ -114,6 +121,7 @@ export class AppTopBarComponent {
     this.panierserviceService.getAll().subscribe(res => {
       this.paniers = res
       this.paniers = this.paniers.filter(p => p.user.id == this.id)
+
       console.log("paniers :", this.paniers)
       this.lignepaniers = this.paniers[0]?.lignepaniers
       this.total = this.paniers[0].total;

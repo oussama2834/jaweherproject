@@ -26,6 +26,22 @@ export class CommandesComponent {
       console.log('commandespourclient',this.Orders_client)
     })
   }
+  validerCommande(commande:Commande) {
+    this.commandeserviceService.validcommand(commande).subscribe(res => {
+      console.log(res)
+      window.location.reload();
+    }, error => {
+      console.log(error)
+   })
+  }
+  refuserCommande(commande:Commande) {
+    this.commandeserviceService.RefuseCommand(commande).subscribe(res => {
+      console.log(res)
+      window.location.reload();
+     }, error => {
+       console.log(error)
+    })
+  }
   ngOnInit() {
     this.user = this.authService.getUser();
     this.role = this.user.roles[0].role;

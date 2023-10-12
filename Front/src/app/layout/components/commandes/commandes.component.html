@@ -60,6 +60,14 @@
                   </div>
               </th>
 
+                  <th style="min-width:11rem">
+                  <div class="flex align-items-center">
+                   Etat
+                      <p-columnFilter type="numeric" field="balance"
+                      display="menu" currency="USD"></p-columnFilter>
+                  </div>
+              </th>
+
 
 
 
@@ -96,7 +104,12 @@
 
                 </div>
               </td> -->
+        <td>
 
+        <b *ngIf="commande.etat == 'valide'" class="text-success"> Accepted </b>
+        <b *ngIf="commande.etat == 'refuse'" class="text-danger"> Refused </b>
+        <b *ngIf="commande.etat == 'In treatement'" class="text-primary"> In treatement </b>
+        </td>
 
             </tr>
             <tr>
@@ -205,11 +218,20 @@
                  {{ligne.quantite}}&nbsp;{{ ligne.produit.nom}}&nbsp;
                 </div>
               </td>
-              <td *ngIf="role == 'ADMIN' ">
-                <button  pButton pRipple label="Delete" (click)="delete(commande.id)"
-                 icon="pi pi-trash"
+              <td *ngIf="role == 'ADMIN'">
+                <button *ngIf="commande.etat == 'In treatement' "  pButton pRipple  (click)="validerCommande(commande)"
+                 icon="pi pi-check"
+                 class="p-button-success ml-2">
+                </button>
+                  <button *ngIf="commande.etat == 'In treatement' " pButton pRipple  (click)="refuserCommande(commande)"
+                 icon="pi pi-times"
                  class="p-button-danger ml-2"></button>
+
+                  <b *ngIf="commande.etat != 'In treatement'" [ngClass]="commande.etat == 'valide' ? 'text-success' : 'text-danger'">
+                    {{commande.etat == 'valide' ? 'Accepted' : 'Refused'}}</b>
+
               </td>
+
 
 
             </tr>

@@ -16,12 +16,13 @@ public class LignePanier {
     @EqualsAndHashCode.Include
     @NonNull
     private Long id;
-    @OneToOne
+
+    @ManyToOne
     private Produit produit;
     private Long quantite = 1L;
 //    private Long nbr_produit;
     private double total ;
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER,cascade =CascadeType.MERGE)
     @JoinColumn(name = "panier_id")
     @JsonBackReference
     Panier panier;

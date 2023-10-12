@@ -39,13 +39,15 @@ public class LignepanierService {
         Optional<Panier> Optionalpanier = panierRepository.findById(id);
         double sum = 0;
         if (Optionalpanier.isPresent()) {
+
             Panier panier = Optionalpanier.get();
+            lignePanier.setPanier(panier);
             for (LignePanier ligne : panier.getLignepaniers()) {
                 sum += ligne.getTotal();
             }
             panier.setTotal(sum);
             panierRepository.save(panier);
-            lignePanier.setPanier(panier);
+//            lignePanier.setPanier(panier);
             lignePanierRepository.save(lignePanier);
 
             return lignePanier;

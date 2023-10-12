@@ -18,7 +18,7 @@ public class CommandeService {
     @Autowired
     PanierRepository panierRepository;
     public Commande AddCommande(Commande commande) {
-
+          commande.setEtat("In treatement");
         return commandeRepository.save(commande);
     }
     public void deleteCommande(Long id) {

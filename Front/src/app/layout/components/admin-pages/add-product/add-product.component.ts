@@ -46,7 +46,7 @@ export class AddProductComponent {
   CratedLineCart = false;
   role = "";
   paniers: Panier[] = [];
-  
+
   lignepaniers: LignePanier[] = [];
   id !: number;
   selectedCategory = "";
@@ -167,9 +167,12 @@ validateAndReadFile(file: File) {
   AddToPanier(produit: Product) {
     let lignePanier = new LignePanier();
     lignePanier.produit = produit;
-    console.log(lignePanier);
+    // console.log(this.user);
+    // console.log(this.user.id);
+    // console.log(lignePanier);
     this.panierServiceService.create(this.user.id,lignePanier).subscribe(res => {
       this.panier = res
+      localStorage.setItem("panier", JSON.stringify(this.panier));
       console.log(this.panier);
       this.loadPaniers();
       this.CratedLineCart = true;

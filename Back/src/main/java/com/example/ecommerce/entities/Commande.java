@@ -19,6 +19,7 @@ public class Commande {
 
     private String adresse_livraison;
     private String code;
+    private String etat;
 //    @ManyToOne(cascade = CascadeType.MERGE)
 //    User user;
 

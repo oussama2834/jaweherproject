@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PanierRepository extends JpaRepository<Panier,Long> {
-    @Query(" SELECT p FROM Panier p WHERE p.user.id = :id")
+    @Query("SELECT p FROM Panier p WHERE p.user.id = :id")
     Panier findPanierByuserId(@Param("id") Long id);
 
 }
